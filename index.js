@@ -18,7 +18,14 @@ app.post('/note', (req, res) => {
     const db = client.db('library')
     const notebook = db.collection('notebook')
 
-    notebook.insertOne(req.body)
+    notebook.insertOne(req.body, (err, result) => {
+      if (err) {
+        console.error(err)
+      } else {
+        console.log(result)
+      }
+      client.close()
+    })
 
     res.sendStatus(201)
   })
