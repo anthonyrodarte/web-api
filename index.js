@@ -31,4 +31,21 @@ app.post('/note', (req, res) => {
   })
 })
 
+app.get('/notes', (req, res) => {
+  MongoClient.connect('mongodb://localhost/library', (err, client) => {
+    if (err) {
+      console.err(err)
+      res.sendStatus(500)
+      process.exit(1)
+    }
+    const db = client.db('library')
+    const notebook = db.collection('notebook')
+
+    notebook
+      .find()
+      .toArray()
+      .then(notes => res.send(notes))
+      .catch(() => res.sendStatus(500))
+  })
+})
 app.listen(3000)
