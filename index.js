@@ -31,7 +31,7 @@ app.post('/note', (req, res) => {
   })
 })
 
-app.get('/note', (req, res) => {
+app.get('/notes', (req, res) => {
   MongoClient.connect('mongodb://localhost/library', (err, client) => {
     if (err) {
       console.err(err)
@@ -41,15 +41,11 @@ app.get('/note', (req, res) => {
     const db = client.db('library')
     const notebook = db.collection('notebook')
 
-    notebook.find().toArray((err, result) => {
-      if (err) {
-        console.error(err)
-      } else {
-        console.log(result)
-      }
-      client.close()
-    })
-    res.sendStatus(200)
+    notebook
+      .find()
+      .toArray()
+      .then(notes => res.send(notes))
+      .catch(() => res.sendStatus(500))
   })
 })
 app.listen(3000)
