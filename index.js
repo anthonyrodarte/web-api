@@ -48,6 +48,18 @@ MongoClient.connect('mongodb://localhost/library', (err, client) => {
       }
     })
   })
+
+  app.delete('/notes/:id', (req, res) => {
+    const id = new ObjectID(req.params.id)
+    notebook.deleteOne({ _id: id }, (err, result) => {
+      if (err) {
+        console.error(err)
+      } else {
+        console.log(result)
+        res.send('id #' + id + ' has been deleted.')
+      }
+    })
+  })
 })
 
 app.listen(3000)
